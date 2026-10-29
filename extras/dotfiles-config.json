@@ -9,7 +9,7 @@
       "gpt-6.1-sol",
       "gpt-5.1-codex"
     ],
-    "cwd": "/home/aiden",
+    "cwd": "@HOME@",
     "harness": "codex",
     "opencodeModels": [
       "google/gemini-3.5-flash",
@@ -230,7 +230,7 @@
     "updateInterval": 3000
   },
   "screenRecord": {
-    "savePath": "/home/aiden"
+    "savePath": "@HOME@"
   },
   "screenSnip": {
     "savePath": ""
@@ -287,7 +287,7 @@
     "showItemId": false
   },
   "wallpaper": {
-    "path": "/home/aiden/extra/from/francesco-ungaro-RdELgb1bNz8-unsplash.jpg",
+    "path": "@HOME@/extra/from/francesco-ungaro-RdELgb1bNz8-unsplash.jpg",
     "thumbnailPath": ""
   },
   "wallpaperSelector": {

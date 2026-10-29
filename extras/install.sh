@@ -56,7 +56,7 @@ rsync -a "$REPO/.config/" "$HOME/.config/"
 rsync -a "$REPO/.local/" "$HOME/.local/"
 if [ ! -f "$HOME/.config/dotfiles/config.json" ] && [ -f "$REPO/extras/dotfiles-config.json" ]; then
     mkdir -p "$HOME/.config/dotfiles"
-    cp "$REPO/extras/dotfiles-config.json" "$HOME/.config/dotfiles/config.json"
+    sed "s|@HOME@|$HOME|g" "$REPO/extras/dotfiles-config.json" > "$HOME/.config/dotfiles/config.json"
 fi
 chmod +x "$HOME/.local/bin/"* "$HOME/.config/hypr/hyprland/scripts/"* 2>/dev/null || true
 
@@ -70,6 +70,7 @@ sudo mkdir -p /etc/sddm.conf.d
 printf '[Theme]\nCurrent=pixie\n' | sudo tee /etc/sddm.conf.d/20-pixie.conf >/dev/null
 
 say "editor"
+npm config set prefix "$HOME/.local" >/dev/null 2>&1 || true
 npm install -g monaco-editor || FAILED+=("monaco-editor")
 
 say "shell and services"

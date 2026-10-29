@@ -1,25 +1,12 @@
 # TODO
 
-Работа по шеллу Quickshell (`~/.config/quickshell/dotfiles` → синхронизируется в `extra/git/dotfiles`).
+## Open
 
-## Открыто
+- The MangoWM port in `.config/mango/` has never been booted in a real session. `mango -p` passes, nothing more.
+- Quickshell reads `hyprctl` in ten files, so the bar, workspaces, night light and theming do not work under MangoWM until it gets a backend.
+- The OpenCode icon in the bar renders as a filled square instead of the logo.
 
-- [ ] Иконка OpenCode в баре рисуется белым прямоугольником (битый SVG) — харнессы трогать не просили
-- [ ] Проверить блюр после перелогина (в текущей сессии Hyprland уже перезагружен, но приложения могли закэшировать)
+## Notes
 
-## Сделано
-
-- [x] Блюр убран: `decoration:blur:enabled = false`, все `blur = true` layer rules удалены, мёртвый `StyledBlurEffect.qml` удалён
-- [x] AI-панель появляется справа; панели AI и быстрых настроек взаимоисключающие
-- [x] Фон кнопок в баре (AI, сеть/блютуз) не подсвечивается — только цвет иконки меняется
-- [x] Color picker работает из панели (таймер жил в уничтожаемом компоненте → перенесён в detached-процесс), зум вернулся, уведомление убрано
-- [x] Overview: кнопки действий справа от иконок приложений убраны
-- [x] Светлая тема у приложений: `xdg-desktop-portal-gtk` падал без `WAYLAND_DISPLAY` в systemd-окружении → Settings-портал не отвечал. Теперь `dbus-update-activation-environment --systemd --all`, портал отдаёт `prefer-dark`; добавлен `QT_QPA_PLATFORMTHEME=kde` для Qt-приложений
-- [x] Аудит: мёртвый код, дубли, падения
-- [x] Иконки Material Symbols Filled (статический инстанс шрифта)
-- [x] Моргание иконок харнессов
-- [x] Тултипы отключены глобально
-- [x] Переход с illogical-impulse-quickshell-git на quickshell из extra
-- [x] Слайдеры яркости/громкости в панели
-- [x] Плеер: только в баре, СКМ play/pause
-- [x] Часы: убраны Todo и аптайм
+- Blur is off on purpose: `decoration.blur.enabled = false`, every window gets `no_blur`, and the old `StyledBlurEffect.qml` is gone.
+- Light theme: `switchwall.sh` treats anything that is not `prefer-dark` as light, so a reset `gsettings` flips the desktop to light on the next wallpaper change.

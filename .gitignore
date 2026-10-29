@@ -1,3 +1,5 @@
 .config/dotfiles/config.json
 extras/fish_variables
 *.bak
+__pycache__/
+*.pyc

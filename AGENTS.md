@@ -12,8 +12,9 @@ git clone <repo> ~/dotfiles && ~/dotfiles/extras/install.sh
 The script installs packages (repo and AUR), flatpaks, configs, fonts, the SDDM theme and
 `monaco-editor`, then enables `sddm`, `NetworkManager`, `bluetooth` and `fstrim.timer`.
 
-Quickshell comes from `extra`, not from an `illogical-impulse` package: upstream 0.3.2 is the version
-the shell runs on, and Arch rebuilds it whenever Qt changes, so no local rebuild is ever needed.
+Quickshell comes from `extra`, not from an `illogical-impulse` package: 0.3.2 is the version the shell
+runs on. Arch rebuilds it after Qt upgrades; until that rebuild lands, the shell can crash on the
+new Qt, so keep it updated.
 
 Not installable from a package, therefore vendored: `Google Sans Flex` in
 `extras/fonts/google-sans-flex/` (the `main`, `title` and `numbers` font) and the SDDM theme
@@ -36,14 +37,17 @@ The launcher resolves the package with `npm root -g`, so node can come from pacm
 
 First boot does not depend on matugen: `hyprland/colors.lua`, `mango/colors.conf`, `kitty/colors.conf`
 and the GTK css are committed as seeds and are overwritten on the first wallpaper change.
-`~/.config/dotfiles/config.json` is not committed; the shell writes defaults on first start.
+`~/.config/dotfiles/config.json` is not committed; the shell writes defaults on first start, and
+`extras/install.sh` seeds it from `extras/dotfiles-config.json` when it is missing.
 
 ## Layout
 
 - `.config/` — the XDG config tree, mirrors `~/.config`.
-- `extras/` — machine state that is not part of the config. Nothing there is required.
+- `extras/` — everything a fresh install needs beyond the config tree: `install.sh`, the package
+  lists, vendored fonts and the SDDM theme.
 - `.config/hypr/hyprland/*.lua` — Hyprland config (Lua, not hyprlang).
-- `.config/mango/` — MangoWM port of the Hyprland config. Untested; Hyprland stays the default session.
+- `.config/mango/` — MangoWM port of the Hyprland config. Never booted in a real session; Hyprland is
+  the session in use.
 - `.config/hypr/custom/*.lua` — upstream override hooks. Keep these header-only: personal
   tweaks go straight into `hyprland/*.lua` so there is one source of truth.
 - `.config/quickshell/dotfiles/` — the shell. Upstream code; changes stay small and hand-merged.
@@ -54,14 +58,15 @@ and the GTK css are committed as seeds and are overwritten on the first wallpape
 The shell name `dotfiles` appears in several places and they must stay in sync:
 
 - directory `.config/quickshell/dotfiles/`
-- shell config directory `~/.config/dotfiles/` (`Directories.qml`, `switchwall.sh`, `applycolor.sh`)
+- shell state directory `~/.config/dotfiles/`, which holds `config.json` and is written by the shell
 - `hl.env("qsConfig", "dotfiles")` in `hyprland/variables.lua`, used as `qs -c $qsConfig`
-- `QUICKSHELL_CONFIG_NAME` in the color scripts
+- `QUICKSHELL_CONFIG_NAME` in `scripts/colors/switchwall.sh` and `scripts/colors/applycolor.sh`
 - the fish alias `q 'qs -c dotfiles'`
 
 ## Conventions
 
 - Everything in the repo is written in English.
+- Commits are authored as `vxrn <vxrn@tutamail.com>`.
 - Do not stage or copy secrets or machine state: dotfile sources are the config that was written
   by hand, not browser profiles, credentials, `fish_variables`, thumbnails, or app caches.
 - Generated, do not hand-edit: `.config/hypr/hyprland/colors.lua`,
@@ -84,4 +89,5 @@ bash -n extras/install.sh
 python3 -m py_compile extras/make-material-symbols-filled.py
 python3 -c "import tomllib;tomllib.load(open('.config/matugen/config.toml','rb'))"
 grep -rIn "illogical\|waffle\|quickshell/ii" .config
+git grep -lP '[\x{0400}-\x{04FF}]' -- ':!*.ttf' ':!*.png' ':!*.jpg'
 ```

@@ -59,8 +59,6 @@ mangobar-git
 mangowm
 matugen
 mesa-utils
-mpv
-mpvpaper
 nano
 nautilus
 network-manager-applet
@@ -98,6 +96,7 @@ sudo
 swaylock
 tesseract
 tree
+ttf-material-symbols-variable-git
 tty-clock
 unzip
 uvicorn

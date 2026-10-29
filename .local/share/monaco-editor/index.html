@@ -59,7 +59,7 @@
 
   async function open(path) {
     const r = await fetch("/api/file?path=" + encodeURIComponent(path));
-    if (!r.ok) return alert("Не открылось: " + (await r.text()));
+    if (!r.ok) return alert("Failed to open: " + (await r.text()));
     file = path;
     monaco.editor.setModelLanguage(model, lang(path));
     model.setValue(await r.text());
@@ -72,7 +72,7 @@
   async function save() {
     if (!file) return openDialog();
     const r = await fetch("/api/file?path=" + encodeURIComponent(file), { method: "POST", body: model.getValue() });
-    if (!r.ok) return alert("Не сохранилось: " + (await r.text()));
+    if (!r.ok) return alert("Failed to save: " + (await r.text()));
     dirty = false; title(); refreshGit();
   }
 
@@ -108,7 +108,7 @@
     if (!repo) return;
     if (!repo.files.length) {
       const d = document.createElement("div");
-      d.className = "empty"; d.textContent = "Чисто";
+      d.className = "empty"; d.textContent = "Empty";
       return side.append(d);
     }
     for (const f of repo.files) {
