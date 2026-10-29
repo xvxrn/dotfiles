@@ -1,7 +1,7 @@
 # dotfiles
 
 Personal XDG config for a Hyprland + Quickshell desktop on Arch. The shell is called `dotfiles`.
-Plain files, no installer. Derived from dots-hyprland; see `NOTICE.md`.
+Plain files. Derived from dots-hyprland; see `README.md` for credit and license.
 
 ## Restore on a fresh install
 
