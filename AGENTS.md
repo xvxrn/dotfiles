@@ -6,21 +6,18 @@ Plain files, no installer. Derived from dots-hyprland; see `NOTICE.md`.
 ## Restore on a fresh install
 
 ```sh
-git clone <repo> ~/dotfiles
-rsync -a ~/dotfiles/.config/ ~/.config/
+git clone <repo> ~/dotfiles && ~/dotfiles/extras/install.sh
 ```
 
-Fonts are not in the repo. They come from packages and one manual install:
-
-```sh
-pacman -S ttf-jetbrains-mono-nerd ttf-material-symbols-variable
-```
+The script installs packages (repo and AUR), flatpaks, configs, fonts, the SDDM theme and
+`monaco-editor`, then enables `sddm`, `NetworkManager`, `bluetooth` and `fstrim.timer`.
 
 Quickshell comes from `extra`, not from an `illogical-impulse` package: upstream 0.3.2 is the version
 the shell runs on, and Arch rebuilds it whenever Qt changes, so no local rebuild is ever needed.
 
-`Google Sans Flex` lives in `~/.local/share/fonts/illogical-impulse-google-sans-flex/` and must be
-copied by hand before the first login; it is the `main`, `title` and `numbers` font.
+Not installable from a package, therefore vendored: `Google Sans Flex` in
+`extras/fonts/google-sans-flex/` (the `main`, `title` and `numbers` font) and the SDDM theme
+`pixie` in `extras/sddm/pixie/`.
 
 Icons need one generated font too, because Qt ignores variable font axes in Quickshell and the
 filled Material Symbols weight has to be baked in. Restart the shell after running it:
@@ -29,8 +26,6 @@ filled Material Symbols weight has to be baked in. Restart the shell after runni
 ./extras/make-material-symbols-filled.py   # writes ~/.local/share/fonts/material-symbols-filled/
 ```
 
-Package list for a fresh install: `extras/packages-explicit.txt` and `extras/flatpaks.txt`.
-
 The editor is `monaco`: `.local/bin/monaco` plus `.local/share/monaco-editor/` are in this repo and
 need `node` and the global npm package:
 
@@ -38,11 +33,6 @@ need `node` and the global npm package:
 npm install -g monaco-editor
 ```
 The launcher resolves the package with `npm root -g`, so node can come from pacman or `~/.local/node`.
-
-```sh
-paru -S --needed - < ~/dotfiles/extras/packages-explicit.txt
-xargs -a ~/dotfiles/extras/flatpaks.txt flatpak install -y
-```
 
 First boot does not depend on matugen: `hyprland/colors.lua`, `mango/colors.conf`, `kitty/colors.conf`
 and the GTK css are committed as seeds and are overwritten on the first wallpaper change.
@@ -90,6 +80,8 @@ for f in .config/hypr/hyprland/*.lua .config/hypr/hyprland/services/*.lua .confi
 bash -n .config/quickshell/dotfiles/scripts/colors/switchwall.sh
 bash -n .config/mango/autostart.sh
 mango -p -c .config/mango/config.conf
+bash -n extras/install.sh
+python3 -m py_compile extras/make-material-symbols-filled.py
 python3 -c "import tomllib;tomllib.load(open('.config/matugen/config.toml','rb'))"
 grep -rIn "illogical\|waffle\|quickshell/ii" .config
 ```

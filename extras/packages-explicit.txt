@@ -46,7 +46,6 @@ iverilog
 jdk21-openjdk
 jq
 kaggle-api
-quickshell
 kitty
 lavat
 lazygit
@@ -65,6 +64,8 @@ mpvpaper
 nano
 nautilus
 network-manager-applet
+nodejs
+npm
 nvidia-open-dkms
 nvidia-settings
 nvidia-utils
@@ -73,6 +74,7 @@ paru
 plymouth
 python-dotenv
 python-fastapi
+python-fonttools
 python-httptools
 python-matplotlib
 python-pillow
@@ -83,6 +85,7 @@ python-svgwrite
 python-uvloop
 python-websockets
 qbittorrent
+quickshell
 rust
 scrcpy
 sddm
