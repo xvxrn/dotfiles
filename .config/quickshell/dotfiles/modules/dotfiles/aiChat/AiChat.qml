@@ -10,7 +10,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
 
-// Left-hand panel, same surface and appearance animation as the right sidebar.
+// Right-hand panel, same surface and appearance animation as the quick settings sidebar.
 PanelWindow {
     id: root
     visible: content.opacity > 0.01
@@ -23,7 +23,7 @@ PanelWindow {
 
     anchors {
         top: true
-        left: true
+        right: true
         bottom: true
     }
 
@@ -169,7 +169,7 @@ PanelWindow {
         anchors {
             fill: parent
             margins: Appearance.sizes.hyprlandGapsOut
-            rightMargin: Appearance.sizes.hyprlandGapsOut + Appearance.sizes.elevationMargin
+            leftMargin: Appearance.sizes.hyprlandGapsOut + Appearance.sizes.elevationMargin
         }
         color: Appearance.colors.colLayer0
         border.width: 1

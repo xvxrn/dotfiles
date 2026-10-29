@@ -14,15 +14,10 @@ QuickToggleModel {
 
     mainAction: () => {
         GlobalStates.sidebarRightOpen = false;
-        delayedActionTimer.start();
-    }
-    Timer {
-        id: delayedActionTimer
-        interval: 300
-        repeat: false
-        onTriggered: {
-            Quickshell.execDetached(["hyprpicker", "-a", "-z", "-n"]);
-        }
+        // Closing the sidebar destroys this component, so the delay has to live in the detached
+        // process. It also stops the picker from sampling the panel itself.
+        // -a copies the picked colour; no -n, the notification is unwanted.
+        Quickshell.execDetached(["bash", "-c", "sleep 0.35; hyprpicker -a"]);
     }
 
     tooltipText: Translation.tr("Color picker")

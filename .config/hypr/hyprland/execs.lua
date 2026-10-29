@@ -10,7 +10,9 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("dbus-update-activation-environment --all")
-    hl.exec_cmd("sleep 1 && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP") -- Some fix idk
+    -- Portals (settings, file chooser) need the Wayland env in the systemd user manager,
+    -- otherwise xdg-desktop-portal-gtk cannot open a display and apps fall back to light theme
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
 
     -- Audio
     hl.exec_cmd("easyeffects --hide-window --service-mode")

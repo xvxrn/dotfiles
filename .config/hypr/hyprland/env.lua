@@ -10,6 +10,9 @@ hl.env("XDG_DATA_DIRS", home_dir .. "/.local/share/flatpak/exports/share:/var/li
 -- Themes
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("XDG_MENU_PREFIX", "plasma-")
+-- Qt apps take their palette from kdeglobals (ColorScheme=MaterialYouDark); without this
+-- platform theme they fall back to the light default
+hl.env("QT_QPA_PLATFORMTHEME", "kde")
 
 -- Virtual environment
 hl.env("DOTFILES_VIRTUAL_ENV", home_dir .. "/.local/state/quickshell/.venv")

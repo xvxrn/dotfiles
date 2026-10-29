@@ -32,9 +32,14 @@ Singleton {
 
     onSidebarRightOpenChanged: {
         if (GlobalStates.sidebarRightOpen) {
+            root.aiChatOpen = false;
             Notifications.timeoutAll();
             Notifications.markAllRead();
         }
+    }
+    onAiChatOpenChanged: {
+        if (root.aiChatOpen)
+            root.sidebarRightOpen = false;
     }
 
     GlobalShortcut {

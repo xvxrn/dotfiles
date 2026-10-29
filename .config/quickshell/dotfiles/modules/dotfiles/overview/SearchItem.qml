@@ -252,54 +252,6 @@ RippleButton {
             text: root.itemClickActionName
         }
 
-        RowLayout {
-            Layout.alignment: Qt.AlignTop
-            Layout.topMargin: root.buttonVerticalPadding
-            Layout.bottomMargin: -root.buttonVerticalPadding // Why is this necessary? Good question.
-            spacing: 4
-            Repeater {
-                model: (root.entry.actions ?? []).slice(0, 4)
-                delegate: RippleButton {
-                    id: actionButton
-                    required property var modelData
-                    property var iconType: modelData.iconType
-                    property string iconName: modelData.iconName ?? ""
-                    implicitHeight: 34
-                    implicitWidth: 34
-
-                    colBackgroundHover: Appearance.colors.colSecondaryContainerHover
-                    colRipple: Appearance.colors.colSecondaryContainerActive
-
-                    contentItem: Item {
-                        id: actionContentItem
-                        anchors.centerIn: parent
-                        Loader {
-                            anchors.centerIn: parent
-                            active: actionButton.iconType === LauncherSearchResult.IconType.Material || actionButton.iconName === ""
-                            sourceComponent: MaterialSymbol {
-                                text: actionButton.iconName || "video_settings"
-                                font.pixelSize: Appearance.font.pixelSize.hugeass
-                                color: root.colForeground
-                            }
-                        }
-                        Loader {
-                            anchors.centerIn: parent
-                            active: actionButton.iconType === LauncherSearchResult.IconType.System && actionButton.iconName !== ""
-                            sourceComponent: IconImage {
-                                source: Quickshell.iconPath(actionButton.iconName)
-                                implicitSize: 20
-                            }
-                        }
-                    }
-
-                    onClicked: modelData.execute()
-
-                    StyledToolTip {
-                        text: modelData.name
-                    }
-                }
-            }
-        }
 
     }
 }

@@ -64,7 +64,9 @@ Item { // Bar content region
             implicitHeight: 30
             buttonRadius: Appearance.rounding.full
             colBackground: "transparent"
-            colBackgroundToggled: Appearance.colors.colLayer2
+            // No fill when open: only the icon changes colour, the background stays untouched
+            colBackgroundToggled: "transparent"
+            colBackgroundToggledHover: Appearance.colors.colLayer1Hover
             toggled: GlobalStates.aiChatOpen
             onClicked: GlobalStates.aiChatOpen = !GlobalStates.aiChatOpen
 
@@ -213,10 +215,10 @@ Item { // Bar content region
             colBackground: hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             colBackgroundHover: Appearance.colors.colLayer1Hover
             colRipple: Appearance.colors.colLayer1Active
-            // Neutral in every state: the button must never glow in a tinted colour
-            colBackgroundToggled: Appearance.colors.colLayer2
-            colBackgroundToggledHover: Appearance.colors.colLayer2Hover
-            colRippleToggled: Appearance.colors.colLayer2Active
+            // Neutral in every state: the background never lights up, only the icon colour changes
+            colBackgroundToggled: "transparent"
+            colBackgroundToggledHover: Appearance.colors.colLayer1Hover
+            colRippleToggled: Appearance.colors.colLayer1Active
             toggled: GlobalStates.sidebarRightOpen
             property color colText: toggled ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
 
