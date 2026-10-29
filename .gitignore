@@ -1,9 +1,3 @@
 .config/dotfiles/config.json
-.config/kitty/colors.conf
-.config/hypr/hyprland/colors.lua
-.config/mango/colors.conf
-.config/gtk-3.0/gtk.css
-.config/gtk-4.0/gtk.css
-.config/hypr/hyprlock/colors.conf
 extras/fish_variables
 *.bak
