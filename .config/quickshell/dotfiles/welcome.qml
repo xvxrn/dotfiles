@@ -1,0 +1,261 @@
+//@ pragma UseQApplication
+//@ pragma Env QS_NO_RELOAD_POPUP=1
+//@ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
+//@ pragma Env QT_QUICK_FLICKABLE_WHEEL_DECELERATION=10000
+
+// Adjust this to make the app smaller or larger
+//@ pragma Env QT_SCALE_FACTOR=1
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Window
+import Quickshell
+import Quickshell.Io
+import qs.services
+import qs.modules.common
+import qs.modules.common.widgets
+import qs.modules.common.functions
+
+ApplicationWindow {
+    id: root
+    property string firstRunFilePath: FileUtils.trimFileProtocol(`${Directories.state}/user/first_run.txt`)
+    property string firstRunFileContent: "This file is just here to confirm you've been greeted :>"
+    property real contentPadding: 8
+    property bool showNextTime: false
+    visible: true
+    onClosing: {
+        Quickshell.execDetached(["notify-send", Translation.tr("Welcome app"), Translation.tr("Enjoy! You can reopen the welcome app any time with <tt>Super+Shift+Alt+/</tt>. To open the settings app, hit <tt>Super+I</tt>"), "-a", "Shell"]);
+        Qt.quit();
+    }
+    title: Translation.tr("Welcome")
+
+    Component.onCompleted: {
+        MaterialThemeLoader.reapplyTheme();
+        Config.readWriteDelay = 0 // Welcome app always only sets one var at a time so delay isn't needed
+    }
+
+    minimumWidth: 600
+    minimumHeight: 400
+    width: 900
+    height: 650
+    color: Appearance.m3colors.m3background
+
+ColumnLayout {
+        anchors {
+            fill: parent
+            margins: contentPadding
+        }
+
+        Item {
+            // Titlebar
+            visible: Config.options?.windows.showTitlebar
+            Layout.fillWidth: true
+            implicitHeight: Math.max(welcomeText.implicitHeight, windowControlsRow.implicitHeight)
+            StyledText {
+                id: welcomeText
+                anchors {
+                    left: Config.options.windows.centerTitle ? undefined : parent.left
+                    horizontalCenter: Config.options.windows.centerTitle ? parent.horizontalCenter : undefined
+                    verticalCenter: parent.verticalCenter
+                    leftMargin: 12
+                }
+                color: Appearance.colors.colOnLayer0
+                text: Translation.tr("Hi there! First things first...")
+                font {
+                    family: Appearance.font.family.title
+                    pixelSize: Appearance.font.pixelSize.title
+                    variableAxes: Appearance.font.variableAxes.title
+                }
+            }
+            RowLayout { // Window controls row
+                id: windowControlsRow
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                StyledText {
+                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    text: Translation.tr("Show next time")
+                }
+                StyledSwitch {
+                    id: showNextTimeSwitch
+                    checked: root.showNextTime
+                    scale: 0.6
+                    Layout.alignment: Qt.AlignVCenter
+                    onCheckedChanged: {
+                        if (checked) {
+                            Quickshell.execDetached(["rm", root.firstRunFilePath]);
+                        } else {
+                            Quickshell.execDetached(["bash", "-c", `echo '${StringUtils.shellSingleQuoteEscape(root.firstRunFileContent)}' > '${StringUtils.shellSingleQuoteEscape(root.firstRunFilePath)}'`]);
+                        }
+                    }
+                }
+                RippleButton {
+                    buttonRadius: Appearance.rounding.full
+                    implicitWidth: 35
+                    implicitHeight: 35
+                    onClicked: root.close()
+                    contentItem: MaterialSymbol {
+                        anchors.centerIn: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        text: "close"
+                        iconSize: 20
+                    }
+
+                    StyledToolTip {
+                        text: Translation.tr("Tip: Close a window with Super+Q")
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            // Content container
+            color: Appearance.m3colors.m3surfaceContainerLow
+            radius: Appearance.rounding.windowRounding - root.contentPadding
+            implicitHeight: contentColumn.implicitHeight
+            implicitWidth: contentColumn.implicitWidth
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            ContentPage {
+                id: contentColumn
+                anchors.fill: parent
+
+                ContentSection {
+                    Layout.fillWidth: true
+                    icon: "language"
+                    title: Translation.tr("Language")
+
+                    ContentSubsection {
+                        title: Translation.tr("Select language")
+                        ConfigSelectionArray {
+                            id: languageSelector
+                            currentValue: Config.options.language.ui
+                            onSelected: newValue => {
+                                Config.options.language.ui = newValue;
+                            }
+                            options: [
+                                {
+                                    displayName: Translation.tr("Auto (System)"),
+                                    value: "auto"
+                                },
+                                ...Translation.allAvailableLanguages.map(lang => {
+                                    return {
+                                        displayName: lang,
+                                        value: lang
+                                    };
+                                })]
+                        }
+                    }
+
+                }
+
+
+                ContentSection {
+                    icon: "format_paint"
+                    title: Translation.tr("Style & wallpaper")
+
+                    ButtonGroup {
+                        Layout.alignment: Qt.AlignHCenter
+                        LightDarkPreferenceButton {
+                            dark: false
+                        }
+                        LightDarkPreferenceButton {
+                            dark: true
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.alignment: Qt.AlignHCenter
+RippleButtonWithIcon {
+                            materialIcon: "wallpaper"
+                            StyledToolTip {
+                                text: Translation.tr("Pick wallpaper image on your system")
+                            }
+                            onClicked: {
+                                Quickshell.execDetached([`${Directories.wallpaperSwitchScriptPath}`]);
+                            }
+                            mainContentComponent: Component {
+                                RowLayout {
+                                    spacing: 10
+                                    StyledText {
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        text: Translation.tr("Choose file")
+                                        color: Appearance.colors.colOnSecondaryContainer
+                                    }
+                                    RowLayout {
+                                        spacing: 3
+                                        KeyboardKey {
+                                            key: "Ctrl"
+                                        }
+                                        KeyboardKey {
+                                            key: "󰖳"
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            text: "+"
+                                        }
+                                        KeyboardKey {
+                                            key: "T"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    NoticeBox {
+                        Layout.fillWidth: true
+                        text: Translation.tr("Change any time later with /dark, /light, /wallpaper in the launcher\nIf the shell's colors aren't changing:\n    1. Open the right sidebar with Super+N\n    2. Click \"Reload Hyprland & Quickshell\" in the top-right corner")
+                    }
+                }
+
+ContentSection {
+                    icon: "info"
+                    title: Translation.tr("Info")
+
+                    Flow {
+                        Layout.fillWidth: true
+                        spacing: 5
+
+                        RippleButtonWithIcon {
+                            materialIcon: "keyboard_alt"
+                            onClicked: {
+                                Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "cheatsheet", "toggle"]);
+                            }
+                            mainContentComponent: Component {
+                                RowLayout {
+                                    spacing: 10
+                                    StyledText {
+                                        font.pixelSize: Appearance.font.pixelSize.small
+                                        text: Translation.tr("Keybinds")
+                                        color: Appearance.colors.colOnSecondaryContainer
+                                    }
+                                    RowLayout {
+                                        spacing: 3
+                                        KeyboardKey {
+                                            key: "󰖳"
+                                        }
+                                        StyledText {
+                                            Layout.alignment: Qt.AlignVCenter
+                                            text: "+"
+                                        }
+                                        KeyboardKey {
+                                            key: "/"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+            }
+        }
+    }
+}

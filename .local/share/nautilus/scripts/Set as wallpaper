@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+file="${NAUTILUS_SCRIPT_SELECTED_FILE_PATHS%%$'\n'*}"
+[[ -f "$file" ]] || exit 1
+exec "$HOME/.config/quickshell/dotfiles/scripts/colors/switchwall.sh" "$file"
