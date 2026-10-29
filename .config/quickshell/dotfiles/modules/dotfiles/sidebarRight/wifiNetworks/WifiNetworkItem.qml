@@ -32,7 +32,7 @@ DialogListItem {
             MaterialSymbol {
                 iconSize: Appearance.font.pixelSize.larger
                 property int strength: root.wifiNetwork?.strength ?? 0
-                text: strength > 80 ? "wifi" : strength > 60 ? "network_wifi_3_bar" : strength > 40 ? "network_wifi_2_bar" : strength > 20 ? "network_wifi_1_bar" : "wifi_2_bar"
+                text: strength > 80 ? "wifi" : strength > 60 ? "network_wifi_3_bar" : strength > 40 ? "network_wifi_2_bar" : "network_wifi_1_bar"
                 color: Appearance.colors.colOnSurfaceVariant
             }
             StyledText {

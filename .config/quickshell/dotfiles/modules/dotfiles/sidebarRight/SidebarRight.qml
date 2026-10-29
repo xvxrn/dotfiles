@@ -63,7 +63,9 @@ Scope {
                 }
             }
 
-            sourceComponent: SidebarRightContent {}
+            sourceComponent: SidebarRightContent {
+                screen: panelWindow.screen
+            }
         }
     }
 

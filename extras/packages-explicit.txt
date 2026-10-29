@@ -37,7 +37,6 @@ illogical-impulse-hyprland
 illogical-impulse-microtex-git
 illogical-impulse-portal
 illogical-impulse-python
-illogical-impulse-quickshell-git
 illogical-impulse-screencapture
 illogical-impulse-toolkit
 illogical-impulse-widgets
@@ -47,6 +46,7 @@ iverilog
 jdk21-openjdk
 jq
 kaggle-api
+quickshell
 kitty
 lavat
 lazygit

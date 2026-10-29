@@ -1,0 +1,166 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>monaco</title>
+<style>
+  :root { --bg: #1e1e1e; --panel: #252526; --border: #333; --fg: #ccc; --muted: #858585; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--fg);
+    font: 12px/1.4 system-ui, sans-serif; }
+  body { display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 10px; height: 30px; padding: 0 10px;
+    background: var(--panel); border-bottom: 1px solid var(--border); user-select: none; }
+  header .branch { color: #7f9dd6; font-weight: 600; }
+  header .name { color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  header button { background: none; border: 0; color: var(--muted); cursor: pointer; font: inherit; padding: 2px 6px; border-radius: 3px; }
+  header button:hover { background: #37373d; color: #fff; }
+  main { flex: 1; display: flex; min-height: 0; }
+  aside { width: 240px; background: var(--panel); border-right: 1px solid var(--border); overflow: auto; flex: none; }
+  aside[hidden] { display: none; }
+  aside .f { display: flex; gap: 6px; padding: 3px 8px; cursor: pointer; white-space: nowrap; overflow: hidden; }
+  aside .f:hover { background: #37373d; }
+  aside .f.cur { background: #094771; }
+  aside .c { width: 12px; flex: none; text-align: center; font-weight: 700; }
+  aside .p { color: var(--muted); overflow: hidden; text-overflow: ellipsis; direction: rtl; text-align: left; }
+  aside .f.cur .p { color: #fff; }
+  aside .empty { padding: 8px; color: var(--muted); }
+  #c { flex: 1; min-width: 0; position: relative; }
+  #splash { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #555; }
+  #ask { position: absolute; top: 34px; left: 50%; transform: translateX(-50%); z-index: 10; }
+  #ask input { width: 520px; padding: 6px 8px; background: #2d2d30; color: #eee; border: 1px solid #007acc;
+    border-radius: 4px; font: 13px ui-monospace, monospace; outline: none; box-shadow: 0 4px 16px #0008; }
+  .git-added { background: #2ea043; width: 3px !important; margin-left: 4px; }
+  .git-removed { background: #f85149; width: 3px !important; margin-left: 4px; }
+  .m-M { color: #e2c08d } .m-A { color: #73c991 } .m-D { color: #f85149 } .m-\? { color: #858585 } .m-R { color: #73c991 }
+</style>
+
+<header>
+  <button id="toggle" title="Toggle sidebar (Ctrl+B)">☰</button>
+  <span class="branch" id="branch"></span>
+  <span class="name" id="name"></span>
+  <button id="open" title="Open file (Ctrl+O)">Open…</button>
+</header>
+<main>
+  <aside id="side" hidden></aside>
+  <div id="c"><div id="splash">monaco…</div></div>
+</main>
+<div id="ask" hidden><input id="path" placeholder="/path/to/file" spellcheck="false"></div>
+
+<script src="/vs/loader.js"></script>
+<script>
+  const LANGS = { js: "javascript", mjs: "javascript", ts: "typescript", json: "json", html: "html", css: "css", md: "markdown",
+    py: "python", lua: "lua", sh: "shell", bash: "shell", c: "c", h: "c", cpp: "cpp", rs: "rust", go: "go", yaml: "yaml", yml: "yaml", toml: "ini", conf: "ini", ini: "ini" };
+
+  let file = new URLSearchParams(location.search).get("file") || "";
+  let editor, model, deco, repo = null, dirty = false;
+  const $ = (id) => document.getElementById(id);
+
+  const title = () => (document.title = "monaco" + (file ? ": " + file.split("/").pop() : "") + (dirty ? " ●" : ""));
+  const lang = (p) => LANGS[(p.split(".").pop() || "").toLowerCase()] || "plaintext";
+
+  async function open(path) {
+    const r = await fetch("/api/file?path=" + encodeURIComponent(path));
+    if (!r.ok) return alert("Не открылось: " + (await r.text()));
+    file = path;
+    monaco.editor.setModelLanguage(model, lang(path));
+    model.setValue(await r.text());
+    dirty = false;
+    $("name").textContent = path;
+    title();
+    refreshGit();
+  }
+
+  async function save() {
+    if (!file) return openDialog();
+    const r = await fetch("/api/file?path=" + encodeURIComponent(file), { method: "POST", body: model.getValue() });
+    if (!r.ok) return alert("Не сохранилось: " + (await r.text()));
+    dirty = false; title(); refreshGit();
+  }
+
+  // Inline input instead of prompt(): a modal in an unfocused tab is deferred by the
+  // browser for tens of seconds and looks like a frozen editor.
+  function openDialog() {
+    const box = $("ask");
+    box.hidden = false;
+    const inp = $("path");
+    if (!inp.value) inp.value = file || "/home/aiden/";
+    inp.focus(); inp.select();
+  }
+
+  $("path").addEventListener("keydown", (e) => {
+    if (e.key === "Escape") return ($("ask").hidden = true);
+    if (e.key !== "Enter") return;
+    const p = $("path").value.trim();
+    $("ask").hidden = true;
+    if (p) open(p);
+  });
+
+  async function refreshGit() {
+    const g = await (await fetch("/api/git?path=" + encodeURIComponent(file || "/home/aiden"))).json();
+    repo = g.repo === false ? null : g;
+    $("branch").textContent = repo ? "⑂ " + repo.branch + (repo.files.length ? "  " + repo.files.length + "±" : "") : "no repo";
+    renderSidebar();
+    if (repo && file) markDiff();
+  }
+
+  function renderSidebar() {
+    const side = $("side");
+    side.textContent = "";
+    if (!repo) return;
+    if (!repo.files.length) {
+      const d = document.createElement("div");
+      d.className = "empty"; d.textContent = "Чисто";
+      return side.append(d);
+    }
+    for (const f of repo.files) {
+      const full = repo.root + "/" + f.path;
+      const row = document.createElement("div");
+      row.className = "f" + (full === file ? " cur" : "");
+      row.title = full;
+      const c = document.createElement("span");
+      c.className = "c m-" + (f.code[0] === "?" ? "?" : f.code[0]);
+      c.textContent = f.code[0] === "?" ? "U" : f.code[0];
+      const p = document.createElement("span");
+      p.className = "p"; p.textContent = f.path;
+      row.append(c, p);
+      row.onclick = () => open(full);
+      side.append(row);
+    }
+  }
+
+  async function markDiff() {
+    const d = await (await fetch("/api/git/diff?path=" + encodeURIComponent(file))).json();
+    const decos = [
+      ...d.added.map(l => ({ range: new monaco.Range(l, 1, l, 1), options: { isWholeLine: true, linesDecorationsClassName: "git-added" } })),
+      ...d.removed.map(l => ({ range: new monaco.Range(l, 1, l, 1), options: { isWholeLine: true, linesDecorationsClassName: "git-removed" } })),
+    ];
+    deco.set(decos);
+  }
+
+  require(["vs/editor/editor.main"], () => {
+    model = monaco.editor.createModel("", "plaintext");
+    $("splash").remove();
+    editor = monaco.editor.create($("c"), { model, theme: "vs-dark", automaticLayout: true, fontSize: 14, renderLineHighlight: "none" });
+    deco = editor.createDecorationsCollection([]);
+    model.onDidChangeContent(() => { if (!dirty) { dirty = true; title(); } });
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, save);
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyO, openDialog);
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyB, toggleSide);
+    $("toggle").onclick = toggleSide;
+    $("open").onclick = openDialog;
+    window.addEventListener("focus", refreshGit);
+    fetch("/api/timing?ms=" + Math.round(performance.now()));
+    // Pick up files handed over by the launcher to this already-open tab.
+    setInterval(async () => {
+      const r = await (await fetch("/api/open")).json().catch(() => ({}));
+      if (r.path && r.path !== file) open(r.path);
+    }, 1000);
+    if (file) open(file); else openDialog();
+    title();
+  });
+
+  function toggleSide() {
+    const s = $("side");
+    s.hidden = !s.hidden;
+    editor.layout();
+  }
+</script>

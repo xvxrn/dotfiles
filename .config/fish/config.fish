@@ -22,6 +22,9 @@ if status is-interactive
         alias ls 'eza --icons=auto'
 
         fish_add_path $HOME/.local/bin
+        if test -d $HOME/.local/node/bin
+            fish_add_path $HOME/.local/node/bin
+        end
     end
     if test "$TERM" = "xterm-kitty"
         alias ssh 'kitten ssh'

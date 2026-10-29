@@ -19,6 +19,7 @@ import qs.modules.dotfiles.sidebarRight.wifiNetworks
 
 Item {
     id: root
+    property var screen
     property int sidebarWidth: Appearance.sizes.sidebarWidth
     property int sidebarPadding: 10
     property bool showBluetoothDialog: false
@@ -93,7 +94,9 @@ Item {
             }
 
             QuickSliders {
+                screen: root.screen
                 Layout.fillWidth: true
+                Layout.preferredHeight: implicitHeight
                 visible: {
                     const quickSliders = Config.options.sidebar.quickSliders;
                     return quickSliders.enable
@@ -104,7 +107,7 @@ Item {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.minimumHeight: 80
+                Layout.minimumHeight: 60
                 radius: Appearance.rounding.normal
                 color: Appearance.colors.colLayer1
 

@@ -60,7 +60,7 @@ hl.bind("SUPER + SHIFT + X", hl.dsp.exec_cmd(
     " || pidof slurp || grim -g \"$(slurp $SLURP_ARGS)\" \"/tmp/ocr_image.png\" && tesseract \"/tmp/ocr_image.png\" stdout -l $(tesseract --list-langs | awk 'NR>1{print $1}' | tr '\\\\n' '+' | sed 's/\\\\+$/\\\\n/') | wl-copy && rm \"/tmp/ocr_image.png\""
 ))
 --# Color picker
-hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a"),
+hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("hyprpicker -a -z -n"),
     { description = "Utilities: Pick color #RRGGBB >> clipboard" })
 --# Recording stuff
 hl.bind("SUPER + SHIFT + R", hl.dsp.global("quickshell:regionRecord"),

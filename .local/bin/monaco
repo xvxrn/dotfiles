@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -e
+DIR="$HOME/.local/share/monaco-editor"
+URL="http://127.0.0.1:8765"
+LOG="$HOME/.local/state/monaco-editor/timing.log"
+
+mkdir -p "$(dirname "$LOG")"
+echo "$(date +%s%3N) launch" >> "$LOG"
+
+MODULES="$(npm root -g 2>/dev/null || echo "$HOME/.local/node/lib/node_modules")"
+ln -sfn "$MODULES/monaco-editor/min/vs" "$DIR/vs"
+
+if ! curl -sf -o /dev/null "$URL/"; then
+  nohup node "$DIR/server.mjs" >/dev/null 2>&1 &
+  for _ in $(seq 50); do curl -sf -o /dev/null "$URL/" && break; sleep 0.05; done
+fi
+
+if [ -n "$1" ]; then
+  ENC="$(printf %s "$(realpath "$1")" | jq -sRr @uri)"
+  curl -sf -o /dev/null -X POST "$URL/api/open?path=$ENC"
+fi
+
+ADDR="$(hyprctl clients -j 2>/dev/null | jq -r '[.[] | select(.title | startswith("monaco"))][0].address // empty')"
+if [ -n "$ADDR" ]; then
+  hyprctl dispatch focuswindow "address:$ADDR" >/dev/null
+  exit 0
+fi
+
+[ -n "$ENC" ] && URL="$URL/?file=$ENC"
+setsid -f flatpak run app.zen_browser.zen "$URL" >/dev/null 2>&1

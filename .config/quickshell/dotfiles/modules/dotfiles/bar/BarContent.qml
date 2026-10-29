@@ -280,8 +280,9 @@ Item { // Bar content region
                 }
                 MaterialSymbol {
                     Layout.leftMargin: indicatorsRowLayout.realSpacing
-                    visible: BluetoothStatus.available
-                    text: BluetoothStatus.connected ? "bluetooth_connected" : BluetoothStatus.enabled ? "bluetooth" : "bluetooth_disabled"
+                    // Android shows a bluetooth icon only while the adapter is on; a slashed glyph reads as broken
+                    visible: BluetoothStatus.available && BluetoothStatus.enabled
+                    text: BluetoothStatus.connected ? "bluetooth_connected" : "bluetooth"
                     iconSize: Appearance.font.pixelSize.larger
                     color: rightSidebarButton.colText
                 }

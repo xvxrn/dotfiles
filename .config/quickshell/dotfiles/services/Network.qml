@@ -37,21 +37,10 @@ Singleton {
     property string materialSymbol: root.ethernet
         ? "lan"
         : (root.wifiEnabled && root.wifiStatus === "connected")
-            ? (
-                (root.active?.strength ?? 0) > 83 ? "wifi" :
-                (root.active?.strength ?? 0) > 67 ? "network_wifi_3_bar" :
-                (root.active?.strength ?? 0) > 50 ? "network_wifi_2_bar" :
-                (root.active?.strength ?? 0) > 33 ? "network_wifi_1_bar" :
-                (root.active?.strength ?? 0) > 17 ? "wifi_1_bar" :
-                "wifi_2_bar"
-            )
-            : (root.wifiStatus === "connecting")
+            ? "wifi"
+            : (root.wifiStatus === "connecting" || root.wifiStatus === "disconnected")
                 ? "wifi_find"
-                : (root.wifiStatus === "disconnected")
-                    ? "wifi_find"
-                    : (root.wifiStatus === "disabled")
-                        ? "wifi_off"
-                        : "signal_wifi_bad"
+                : "wifi_off"
 
     // Control
     function enableWifi(enabled = true): void {

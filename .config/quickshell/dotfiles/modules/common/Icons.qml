@@ -38,16 +38,13 @@ Singleton {
         if (Network.wifiEnabled && Network.wifiStatus === "connected") {
             const strength = Network.active?.strength ?? 0
             if (strength > 83) return "wifi";
-            if (strength > 67) return "network_wifi_3_bar";
-            if (strength > 50) return "network_wifi_2_bar";
-            if (strength > 33) return "network_wifi_1_bar";
-            if (strength > 17) return "wifi_1_bar";
-            return "wifi_2_bar"
+            if (strength > 60) return "network_wifi_3_bar";
+            if (strength > 30) return "network_wifi_2_bar";
+            return "network_wifi_1_bar";
         } else {
-            if (Network.wifiStatus === "connecting") return "wifi_find";
-            if (Network.wifiStatus === "disconnected") return "wifi_find";
+            if (Network.wifiStatus === "connecting" || Network.wifiStatus === "disconnected") return "wifi_find";
             if (Network.wifiStatus === "disabled") return "wifi_off";
-            return "signal_wifi_bad";
+            return "wifi_off";
         }
     }
 

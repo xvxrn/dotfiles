@@ -16,10 +16,28 @@ Fonts are not in the repo. They come from packages and one manual install:
 pacman -S ttf-jetbrains-mono-nerd ttf-material-symbols-variable
 ```
 
+Quickshell comes from `extra`, not from an `illogical-impulse` package: upstream 0.3.2 is the version
+the shell runs on, and Arch rebuilds it whenever Qt changes, so no local rebuild is ever needed.
+
 `Google Sans Flex` lives in `~/.local/share/fonts/illogical-impulse-google-sans-flex/` and must be
 copied by hand before the first login; it is the `main`, `title` and `numbers` font.
 
+Icons need one generated font too, because Qt ignores variable font axes in Quickshell and the
+filled Material Symbols weight has to be baked in. Restart the shell after running it:
+
+```sh
+./extras/make-material-symbols-filled.py   # writes ~/.local/share/fonts/material-symbols-filled/
+```
+
 Package list for a fresh install: `extras/packages-explicit.txt` and `extras/flatpaks.txt`.
+
+The editor is `monaco`: `.local/bin/monaco` plus `.local/share/monaco-editor/` are in this repo and
+need `node` and the global npm package:
+
+```sh
+npm install -g monaco-editor
+```
+The launcher resolves the package with `npm root -g`, so node can come from pacman or `~/.local/node`.
 
 ```sh
 paru -S --needed - < ~/dotfiles/extras/packages-explicit.txt
