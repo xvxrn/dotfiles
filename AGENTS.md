@@ -19,6 +19,13 @@ pacman -S ttf-jetbrains-mono-nerd ttf-material-symbols-variable
 `Google Sans Flex` lives in `~/.local/share/fonts/illogical-impulse-google-sans-flex/` and must be
 copied by hand before the first login; it is the `main`, `title` and `numbers` font.
 
+Package list for a fresh install: `extras/packages-explicit.txt` and `extras/flatpaks.txt`.
+
+```sh
+paru -S --needed - < ~/dotfiles/extras/packages-explicit.txt
+xargs -a ~/dotfiles/extras/flatpaks.txt flatpak install -y
+```
+
 First boot does not depend on matugen: `hyprland/colors.lua`, `mango/colors.conf`, `kitty/colors.conf`
 and the GTK css are committed as seeds and are overwritten on the first wallpaper change.
 `~/.config/dotfiles/config.json` is not committed; the shell writes defaults on first start.
