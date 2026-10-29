@@ -1,0 +1,300 @@
+{
+  "ai": {
+    "claudeModels": [
+      "opus",
+      "sonnet"
+    ],
+    "codexModels": [
+      "gpt-6.1-terra",
+      "gpt-6.1-sol",
+      "gpt-5.1-codex"
+    ],
+    "cwd": "/home/aiden",
+    "harness": "codex",
+    "opencodeModels": [
+      "google/gemini-3.5-flash",
+      "openai/gpt-5.1-codex"
+    ]
+  },
+  "appearance": {
+    "extraBackgroundTint": true,
+    "fakeScreenRounding": 2,
+    "fonts": {
+      "expressive": "Google Sans Flex",
+      "iconNerd": "JetBrains Mono NF",
+      "main": "Google Sans Flex",
+      "monospace": "JetBrains Mono NF",
+      "numbers": "Google Sans Flex",
+      "reading": "Google Sans Flex",
+      "title": "Google Sans Flex"
+    },
+    "palette": {
+      "accentColor": "",
+      "type": "scheme-tonal-spot"
+    },
+    "transparency": {
+      "automatic": true,
+      "backgroundTransparency": 0.11,
+      "contentTransparency": 0.57,
+      "enable": false
+    },
+    "wallpaperTheming": {
+      "enableAppsAndShell": true,
+      "enableQtApps": true,
+      "enableTerminal": true,
+      "terminalGenerationProps": {
+        "forceDarkMode": false,
+        "harmonizeThreshold": 100,
+        "harmony": 0.6,
+        "termFgBoost": 0.35
+      }
+    }
+  },
+  "apps": {
+    "bluetooth": "kcmshell6 kcm_bluetooth",
+    "changePassword": "kitty -1 --hold=yes fish -i -c 'passwd'",
+    "manageUser": "kcmshell6 kcm_users",
+    "network": "kcmshell6 kcm_networkmanagement",
+    "networkEthernet": "kcmshell6 kcm_networkmanagement",
+    "taskManager": "plasma-systemmonitor --page-name Processes",
+    "terminal": "kitty -1",
+    "update": "kitty -1 --hold=yes fish -i -c 'pkexec pacman -Syu'",
+    "volumeMixer": "~/.config/hypr/hyprland/scripts/launch_first_available.sh \"pavucontrol-qt\" \"pavucontrol\""
+  },
+  "audio": {
+    "protection": {
+      "enable": false,
+      "maxAllowed": 99,
+      "maxAllowedIncrease": 10
+    }
+  },
+  "bar": {
+    "autoHide": {
+      "enable": false,
+      "hoverRegionWidth": 2,
+      "pushWindows": false,
+      "showWhenPressingSuper": {
+        "delay": 140,
+        "enable": true
+      }
+    },
+    "borderless": false,
+    "indicators": {
+      "notifications": {
+        "showUnreadCount": false
+      }
+    },
+    "resources": {
+      "alwaysShowCpu": true,
+      "alwaysShowSwap": true,
+      "cpuWarningThreshold": 90,
+      "memoryWarningThreshold": 95,
+      "swapWarningThreshold": 85
+    },
+    "screenList": [],
+    "showBackground": true,
+    "tooltips": {
+      "clickToShow": false
+    },
+    "topLeftIcon": "spark",
+    "workspaces": {
+      "alwaysShowNumbers": true,
+      "monochromeIcons": true,
+      "numberMap": [
+        "1",
+        "2"
+      ],
+      "showAppIcons": false,
+      "showNumberDelay": 300,
+      "shown": 5,
+      "useNerdFont": false
+    }
+  },
+  "battery": {
+    "automaticSuspend": true,
+    "critical": 5,
+    "full": 101,
+    "low": 20,
+    "suspend": 3
+  },
+  "cheatsheet": {
+    "fontSize": {
+      "comment": 12,
+      "key": 12
+    },
+    "splitButtons": false,
+    "superKey": "",
+    "useFnSymbol": false,
+    "useMacSymbol": false,
+    "useMouseSymbol": false
+  },
+  "conflictKiller": {
+    "autoKillNotificationDaemons": false
+  },
+  "crosshair": {
+    "code": "0;P;d;1;0l;10;0o;2;1b;0"
+  },
+  "hacks": {
+    "arbitraryRaceConditionDelay": 20
+  },
+  "interactions": {
+    "deadPixelWorkaround": {
+      "enable": false
+    },
+    "scrolling": {
+      "fasterTouchpadScroll": false,
+      "mouseScrollDeltaThreshold": 120,
+      "mouseScrollFactor": 120,
+      "touchpadScrollFactor": 450
+    }
+  },
+  "language": {
+    "ui": "auto"
+  },
+  "launcher": {},
+  "light": {
+    "antiFlashbang": {
+      "enable": false
+    },
+    "night": {
+      "automatic": true,
+      "colorTemperature": 5000,
+      "from": "19:00",
+      "to": "06:30"
+    }
+  },
+  "lock": {
+    "blur": {
+      "enable": true,
+      "extraZoom": 1.1,
+      "radius": 100
+    },
+    "centerClock": true,
+    "launchOnStartup": false,
+    "materialShapeChars": true,
+    "security": {
+      "requirePasswordToPower": false,
+      "unlockKeyring": true
+    },
+    "showLockedText": true,
+    "useHyprlock": false
+  },
+  "media": {
+    "filterDuplicatePlayers": true
+  },
+  "networking": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+  },
+  "notifications": {
+    "monitor": {
+      "enable": false,
+      "name": ""
+    },
+    "timeout": 7000
+  },
+  "osd": {
+    "timeout": 1000
+  },
+  "overlay": {
+    "clickthroughOpacity": 0.8,
+    "darkenScreen": true,
+    "floatingImage": {
+      "imageSource": "https://media.tenor.com/H5U5bJzj3oAAAAAi/kukuru.gif",
+      "scale": 0.5
+    },
+    "openingZoomAnimation": true
+  },
+  "regionSelector": {
+    "annotation": {
+      "useSatty": false
+    },
+    "circle": {
+      "padding": 10,
+      "strokeWidth": 6
+    },
+    "rect": {
+      "showAimLines": true
+    },
+    "targetRegions": {
+      "content": true,
+      "contentRegionOpacity": 0.8,
+      "layers": false,
+      "opacity": 0.3,
+      "selectionPadding": 5,
+      "showLabel": false,
+      "windows": true
+    }
+  },
+  "resources": {
+    "historyLength": 60,
+    "updateInterval": 3000
+  },
+  "screenRecord": {
+    "savePath": "/home/aiden"
+  },
+  "screenSnip": {
+    "savePath": ""
+  },
+  "search": {
+    "imageSearch": {
+      "imageSearchEngineBaseUrl": "https://lens.google.com/uploadbyurl?url=",
+      "useCircleSelection": false
+    },
+    "prefix": {
+      "action": "/",
+      "app": ">",
+      "clipboard": ";"
+    },
+    "sloppy": false
+  },
+  "sidebar": {
+    "cornerOpen": {
+      "bottom": false,
+      "clickless": false,
+      "clicklessCornerEnd": true,
+      "clicklessCornerVerticalOffset": 1,
+      "cornerRegionHeight": 5,
+      "cornerRegionWidth": 250,
+      "enable": true,
+      "valueScroll": true,
+      "visualize": false
+    },
+    "quickSliders": {
+      "enable": true,
+      "showBrightness": true,
+      "showMic": false,
+      "showVolume": true
+    }
+  },
+  "sounds": {
+    "battery": false,
+    "theme": "freedesktop"
+  },
+  "time": {
+    "dateFormat": "ddd, dd/MM",
+    "dateWithYearFormat": "dd/MM/yyyy",
+    "format": "hh:mm",
+    "secondPrecision": false,
+    "shortDateFormat": "dd/MM"
+  },
+  "tray": {
+    "filterPassive": true,
+    "invertPinnedItems": true,
+    "monochromeIcons": true,
+    "pinnedItems": [
+      "Fcitx"
+    ],
+    "showItemId": false
+  },
+  "wallpaper": {
+    "path": "/home/aiden/extra/from/francesco-ungaro-RdELgb1bNz8-unsplash.jpg",
+    "thumbnailPath": ""
+  },
+  "wallpaperSelector": {
+    "useSystemFileDialog": true
+  },
+  "windows": {
+    "centerTitle": true,
+    "showTitlebar": true
+  }
+}
