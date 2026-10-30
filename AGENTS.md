@@ -12,6 +12,12 @@ git clone <repo> ~/dotfiles && ~/dotfiles/extras/install.sh
 The script installs packages (repo and AUR), flatpaks, configs, fonts, the SDDM theme, `gray` and
 `monaco-editor`, then enables `sddm`, `NetworkManager`, `bluetooth` and `fstrim.timer`.
 
+It runs a preflight before touching anything: the system must be fully updated, every package must
+resolve in a repository or the AUR, every flatpak must exist on flathub, the gray release must be
+downloadable, the vendored assets and colour seeds must be present, and there must be at least 4 GB
+free. `--check` runs only that preflight, `--dry-run` prints the plan. `extras/verify.sh` checks the
+result after installing and exits non-zero if anything is missing.
+
 `gray` is the AI panel backend. It is not packaged; the script downloads the latest `vstaln/gray`
 release, verifies it against `SHA256SUMS` and installs it to `~/.local/bin/gray`.
 
@@ -89,6 +95,8 @@ bash -n .config/quickshell/dotfiles/scripts/colors/switchwall.sh
 bash -n .config/mango/autostart.sh
 mango -p -c .config/mango/config.conf
 bash -n extras/install.sh
+bash -n extras/verify.sh
+./extras/install.sh --check
 python3 -m py_compile extras/make-material-symbols-filled.py
 python3 -c "import tomllib;tomllib.load(open('.config/matugen/config.toml','rb'))"
 grep -rIn "illogical\|waffle\|quickshell/ii" .config
