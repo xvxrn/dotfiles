@@ -24,4 +24,5 @@ hl.on("hyprland.start", function ()
 
     -- Cursor
     hl.exec_cmd("hyprctl setcursor Bibata-Modern-Classic 24")
+    hl.exec_cmd("$HOME/.config/hypr/hyprland/scripts/cursor-shake.py")
 end)
