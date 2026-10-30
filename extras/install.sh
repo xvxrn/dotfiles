@@ -72,6 +72,23 @@ printf '[Theme]\nCurrent=pixie\n' | sudo tee /etc/sddm.conf.d/20-pixie.conf >/de
 say "cursor plugin"
 "$REPO/extras/build-dynamic-cursors.sh"
 
+say "gray"
+if [ ! -x "$HOME/.local/bin/gray" ]; then
+    tmp="$(mktemp -d)"
+    base="https://github.com/vstaln/gray/releases/latest/download"
+    asset="gray-stable-x86_64-linux.tar.gz"
+    curl -fsSL -o "$tmp/$asset" "$base/$asset"
+    curl -fsSL -o "$tmp/SHA256SUMS" "$base/SHA256SUMS"
+    ( cd "$tmp" && grep " $asset\$" SHA256SUMS | sha256sum -c - >/dev/null ) || {
+        echo "gray: checksum mismatch, not installed" >&2
+        FAILED+=("gray")
+    }
+    mkdir -p "$HOME/.local/bin"
+    tar xzf "$tmp/$asset" -C "$HOME/.local/bin" gray 2>/dev/null && chmod +x "$HOME/.local/bin/gray"
+    rm -rf "$tmp"
+fi
+"$HOME/.local/bin/gray" --version || FAILED+=("gray")
+
 say "editor"
 npm config set prefix "$HOME/.local" >/dev/null 2>&1 || true
 npm install -g monaco-editor || FAILED+=("monaco-editor")

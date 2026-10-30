@@ -9,8 +9,11 @@ Plain files. Derived from dots-hyprland; see `README.md` for credit and license.
 git clone <repo> ~/dotfiles && ~/dotfiles/extras/install.sh
 ```
 
-The script installs packages (repo and AUR), flatpaks, configs, fonts, the SDDM theme and
+The script installs packages (repo and AUR), flatpaks, configs, fonts, the SDDM theme, `gray` and
 `monaco-editor`, then enables `sddm`, `NetworkManager`, `bluetooth` and `fstrim.timer`.
+
+`gray` is the AI panel backend. It is not packaged; the script downloads the latest `vstaln/gray`
+release, verifies it against `SHA256SUMS` and installs it to `~/.local/bin/gray`.
 
 Quickshell comes from `extra`, not from an `illogical-impulse` package: 0.3.2 is the version the shell
 runs on. Arch rebuilds it after Qt upgrades; until that rebuild lands, the shell can crash on the
