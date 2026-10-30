@@ -40,9 +40,6 @@ and the GTK css are committed as seeds and are overwritten on the first wallpape
 `~/.config/dotfiles/config.json` is not committed; the shell writes defaults on first start, and
 `extras/install.sh` seeds it from `extras/dotfiles-config.json` when it is missing.
 
-The cursor size pulse (`hyprland/scripts/cursor-shake.py`) reads `/dev/input/event*` directly, so the
-user must be in the `input` group.
-
 ## Layout
 
 - `.config/` — the XDG config tree, mirrors `~/.config`.
