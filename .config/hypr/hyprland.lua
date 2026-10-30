@@ -18,6 +18,7 @@ require("hyprland.rules")
 require("hyprland.colors")
 require("hyprland.keybinds")
 
+
 -- Custom configurations --
 if is_file_exists(HOME .. "/.config/hypr/custom/execs.lua") then
     require("custom.execs")

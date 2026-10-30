@@ -69,6 +69,9 @@ sudo cp -a "$REPO/extras/sddm/pixie" /usr/share/sddm/themes/
 sudo mkdir -p /etc/sddm.conf.d
 printf '[Theme]\nCurrent=pixie\n' | sudo tee /etc/sddm.conf.d/20-pixie.conf >/dev/null
 
+say "cursor plugin"
+"$REPO/extras/build-dynamic-cursors.sh"
+
 say "editor"
 npm config set prefix "$HOME/.local" >/dev/null 2>&1 || true
 npm install -g monaco-editor || FAILED+=("monaco-editor")
