@@ -12,6 +12,7 @@ git checkout -q "$COMMIT"
 sed -i \
     -e 's/prop(NS("mode"), *"tilt"/prop(NS("mode"),                   "none"/' \
     -e 's/conf(NS("shake:ipc"), *false/conf(NS("shake:ipc"),              true/' \
+    -e 's/conf(NS("shake:threshold"), *6\.0f/conf(NS("shake:threshold"),        3.0f/' \
     -e 's/conf(NS("shake:base"), *4\.0f/conf(NS("shake:base"),             2.2f/' \
     -e 's/conf(NS("shake:speed"), *4\.0f/conf(NS("shake:speed"),            1.5f/' \
     -e 's/conf(NS("shake:limit"), *0\.0f/conf(NS("shake:limit"),            3.0f/' \
