@@ -8,11 +8,10 @@ import time
 THEME = "Bibata-Modern-Classic"
 BASE = 24
 BIG = 72
-SLIDE = 6
+SLIDE = 12
 FLIPS = 4
-SPAN = 0.6
+SPAN = 0.5
 HOLD = 0.7
-GAP = 0.03
 
 EVENT = struct.Struct("llHHi")
 REL = 2
@@ -37,11 +36,9 @@ def main():
         return
 
     size = BASE
-    acc = 0
     last_sign = 0
     flips = 0
     first = 0.0
-    eval_at = 0.0
     revert_at = None
 
     def setsize(new):
@@ -71,15 +68,10 @@ def main():
                 offset += EVENT.size
                 if etype != REL or code != REL_X or revert_at is not None:
                     continue
-                acc += value
-
-                if abs(acc) < SLIDE or now < eval_at:
+                if value == 0 or abs(value) < SLIDE:
                     continue
 
-                eval_at = now + GAP
-                sign = 1 if acc > 0 else -1
-                acc = 0
-
+                sign = 1 if value > 0 else -1
                 if sign == last_sign:
                     continue
                 last_sign = sign
