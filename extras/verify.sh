@@ -44,7 +44,10 @@ done
 for f in \
     "$HOME/.config/hypr/hyprland.lua" \
     "$HOME/.config/hypr/hyprland/colors.lua" \
-    "$HOME/.config/hypr/hyprpaper.conf" \
+    "$HOME/.config/hypr/hyprland/execs.lua" \
+    "$HOME/.config/hypr/hypridle.conf" \
+    "$HOME/.config/mango/config.conf" \
+    "$HOME/.config/matugen/config.toml" \
     "$HOME/.config/kitty/kitty.conf" \
     "$HOME/.config/kitty/colors.conf" \
     "$HOME/.config/fish/config.fish" \
