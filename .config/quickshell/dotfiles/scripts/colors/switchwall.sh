@@ -250,10 +250,10 @@ switch() {
     # Determine mode if not set
     if [[ -z "$mode_flag" ]]; then
         current_mode=$(gsettings get org.gnome.desktop.interface color-scheme 2>/dev/null | tr -d "'")
-        if [[ "$current_mode" == "prefer-dark" ]]; then
-            mode_flag="dark"
-        else
+        if [[ "$current_mode" == "prefer-light" ]]; then
             mode_flag="light"
+        else
+            mode_flag="dark"
         fi
     fi
 

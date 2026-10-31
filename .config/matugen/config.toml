@@ -32,7 +32,3 @@ output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
 [templates.kitty]
 input_path = '~/.config/matugen/templates/kitty/colors.conf'
 output_path = '~/.config/kitty/colors.conf'
-
-[templates.mango]
-input_path = '~/.config/matugen/templates/mango/colors.conf'
-output_path = '~/.config/mango/colors.conf'

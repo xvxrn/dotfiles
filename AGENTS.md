@@ -44,7 +44,7 @@ npm install -g monaco-editor
 ```
 The launcher resolves the package with `npm root -g`, so node can come from pacman or `~/.local/node`.
 
-First boot does not depend on matugen: `hyprland/colors.lua`, `mango/colors.conf`, `kitty/colors.conf`
+First boot does not depend on matugen: `hyprland/colors.lua`, `kitty/colors.conf`
 and the GTK css are committed as seeds and are overwritten on the first wallpaper change.
 `~/.config/dotfiles/config.json` is not committed; the shell writes defaults on first start, and
 `extras/install.sh` seeds it from `extras/dotfiles-config.json` when it is missing.
@@ -55,8 +55,8 @@ and the GTK css are committed as seeds and are overwritten on the first wallpape
 - `extras/` — everything a fresh install needs beyond the config tree: `install.sh`, the package
   lists, vendored fonts and the SDDM theme.
 - `.config/hypr/hyprland/*.lua` — Hyprland config (Lua, not hyprlang).
-- `.config/mango/` — MangoWM port of the Hyprland config. Never booted in a real session; Hyprland is
-  the session in use.
+- `extras/mango/` — MangoWM port of the Hyprland config, parked and not installed. It broke the
+  session when booted; see `extras/mango/README.md`.
 - `.config/hypr/custom/*.lua` — upstream override hooks. Keep these header-only: personal
   tweaks go straight into `hyprland/*.lua` so there is one source of truth.
 - `.config/quickshell/dotfiles/` — the shell. Upstream code; changes stay small and hand-merged.
@@ -80,7 +80,7 @@ The shell name `dotfiles` appears in several places and they must stay in sync:
   by hand, not browser profiles, credentials, `fish_variables`, thumbnails, or app caches.
 - Generated, do not hand-edit: `.config/hypr/hyprland/colors.lua`,
   `.config/hypr/hyprlock/colors.conf`, `.config/kitty/colors.conf`,
-  `.config/gtk-3.0/gtk.css`, `.config/gtk-4.0/gtk.css`, `.config/mango/colors.conf`.
+  `.config/gtk-3.0/gtk.css`, `.config/gtk-4.0/gtk.css`.
   They are committed only as first-boot seeds; matugen overwrites them.
 - Terminal is kitty, file manager is Nautilus, editor is `~/.local/bin/monaco`. Launcher and
   power menu come from Quickshell.
@@ -92,8 +92,8 @@ The shell name `dotfiles` appears in several places and they must stay in sync:
 ```sh
 for f in .config/hypr/hyprland/*.lua .config/hypr/hyprland/services/*.lua .config/hypr/custom/*.lua; do luac -p "$f"; done
 bash -n .config/quickshell/dotfiles/scripts/colors/switchwall.sh
-bash -n .config/mango/autostart.sh
-mango -p -c .config/mango/config.conf
+bash -n extras/mango/autostart.sh
+mango -p -c extras/mango/config.conf
 bash -n extras/install.sh
 bash -n extras/verify.sh
 ./extras/install.sh --check

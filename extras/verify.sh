@@ -46,7 +46,6 @@ for f in \
     "$HOME/.config/hypr/hyprland/colors.lua" \
     "$HOME/.config/hypr/hyprland/execs.lua" \
     "$HOME/.config/hypr/hypridle.conf" \
-    "$HOME/.config/mango/config.conf" \
     "$HOME/.config/matugen/config.toml" \
     "$HOME/.config/kitty/kitty.conf" \
     "$HOME/.config/kitty/colors.conf" \
@@ -67,7 +66,6 @@ check_shell "fc-list | grep -qi 'google sans flex'" "google sans flex installed"
 check "sddm enabled" systemctl is-enabled sddm
 check "networkmanager enabled" systemctl is-enabled NetworkManager
 check "hyprland lua parses" luac -p "$HOME/.config/hypr/hyprland.lua"
-check "mango config parses" mango -p -c "$HOME/.config/mango/config.conf"
 
 printf '\n%d ok, %d failed\n' "$ok" "$bad"
 [ "$bad" -eq 0 ]
